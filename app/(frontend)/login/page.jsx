@@ -87,7 +87,7 @@ export default function LoginPage() {
   const panelX = mode === "login" ? "0%" : "100%";
 
   return (
-    <div style={{ position: "relative", width: "100vw", height: "100vh", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ position: "relative", width: "100vw", height: "100vh", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#f9f5f0", colorScheme: "only light" }}>
 
       {/* Tiles background */}
       <div style={{ position: "absolute", inset: 0, zIndex: 0, "--tile": "#e8d8c6" }}>
