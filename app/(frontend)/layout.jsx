@@ -1,7 +1,5 @@
-"use client";
-
-import { SessionProvider } from "next-auth/react";
-
+// app/(frontend)/layout.jsx
+// SessionProvider y CarritoProvider ya están en app/Providers.jsx (registrado en app/layout.js).
 export default function FrontendLayout({ children }) {
-  return <SessionProvider>{children}</SessionProvider>;
+  return <>{children}</>;
 }

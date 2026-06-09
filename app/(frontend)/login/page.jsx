@@ -49,7 +49,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (status === "authenticated") router.push("/home");
+    if (status === "authenticated") router.push("/catalogo");
   }, [status, router]);
 
   if (status === "loading") {
@@ -75,8 +75,34 @@ export default function LoginPage() {
 
   async function handleRegister(e) {
     e.preventDefault();
-    // TODO: implementar registro con Supabase
-    setError("El registro estará disponible próximamente");
+    setError("");
+    setLoading(true);
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre: regName, email: regEmail, password: regPassword }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setError(json.error ?? "Error al registrar");
+        setLoading(false);
+        return;
+      }
+      const result = await signIn("credentials", {
+        email: regEmail,
+        password: regPassword,
+        redirect: false,
+      });
+      if (result?.error) {
+        setError("Cuenta creada. Inicia sesión con tu correo y contraseña.");
+        switchMode("login");
+      }
+    } catch {
+      setError("Error de conexión. Intenta de nuevo.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   function switchMode(next) {
@@ -233,19 +259,20 @@ export default function LoginPage() {
                   <input type="password" placeholder="Contraseña" value={regPassword} onChange={e => setRegPassword(e.target.value)} required style={INPUT} />
                   <button
                     type="submit"
+                    disabled={loading}
                     style={{
                       padding: "12px",
-                      backgroundColor: "#8B5E3C",
+                      backgroundColor: loading ? "#c4a882" : "#8B5E3C",
                       color: "white",
                       border: "none",
                       borderRadius: "4px",
                       fontSize: "14px",
                       fontWeight: "600",
-                      cursor: "pointer",
+                      cursor: loading ? "not-allowed" : "pointer",
                       marginTop: "4px",
                     }}
                   >
-                    Registrarse
+                    {loading ? "Registrando..." : "Registrarse"}
                   </button>
                 </form>
               </motion.div>
